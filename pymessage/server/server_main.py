@@ -2,7 +2,12 @@ import aiohttp
 from aiohttp import web
 import asyncpg
 import secrets
-import config
+
+try:
+    import config
+except ImportError:
+    import sys
+    sys.exit('config not found, create a config.py based on the example')
 
 routes = web.RouteTableDef()
 
