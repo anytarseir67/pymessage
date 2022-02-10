@@ -136,7 +136,6 @@ class PyMessageServer(web.Application):
         ws = web.WebSocketResponse()
         await ws.prepare(request)
         async for msg in ws:
-            print(msg)
             if msg.type == aiohttp.WSMsgType.TEXT:
                 data = msg.json()
 
@@ -174,7 +173,6 @@ class PyMessageServer(web.Application):
             elif msg.type == aiohttp.WSMsgType.ERROR:
                 print('ws connection closed with exception %s' % ws.exception())
 
-        print('socket closed')
         app.sockets.pop(ws['user'])
 
     @routes.get('/get_user')
