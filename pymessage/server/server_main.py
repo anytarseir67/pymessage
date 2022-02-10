@@ -183,5 +183,6 @@ class PyMessageServer(web.Application):
         return web.json_response({'user': user})
 
 
-app = PyMessageServer()
-app.run()
+if __name__ == "__main__":
+    app = PyMessageServer()
+    app.run()
