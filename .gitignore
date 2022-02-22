@@ -112,7 +112,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# custom
 pymessage/server/server_main - Copy.py
 pymessage/client/test.py
 pymessage/client/test2.py
 pymessage/server/config.py
+pymessage/server/server_main.build/
+*.cmd
+*.exe
