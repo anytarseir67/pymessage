@@ -2,6 +2,7 @@ import aiohttp
 from aiohttp import web
 import asyncpg
 import secrets
+from typing import Dict, Union, List
 
 try:
     import config
@@ -16,7 +17,7 @@ class PyMessageServer(web.Application):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self._port = config.port
-        self.sockets = {} # id: socket
+        self.sockets: Dict[int, web.WebSocketResponse] = {}
 
 
     def run(self) -> None:
@@ -30,7 +31,7 @@ class PyMessageServer(web.Application):
                                     database=config.db, host=config.db_host)
 
 
-    async def get_user(self, id: int) -> dict:
+    async def get_user(self, id: int) -> Union[Dict[str, str], None]:
         resp = await self.conn.fetch('SELECT * FROM accounts WHERE id=$1', id)
         resp = resp[0]
         if resp:
@@ -40,7 +41,7 @@ class PyMessageServer(web.Application):
         return None
 
 
-    async def get_friends(self, id) -> list:
+    async def get_friends(self, id) -> Dict[str, Union[str, List[Dict[str, str]]]]:
         try:
             _friends = await self.conn.fetch('SELECT added FROM accounts WHERE id=$1', id)
             _friends = _friends[0]
@@ -114,7 +115,7 @@ class PyMessageServer(web.Application):
         return {'type': 'error', 'error': 'acc not found'}
 
 
-    async def create_acc(self, ws, msg, json) -> bool:
+    async def create_acc(self, ws, msg, json) -> Dict[str, Union[str, int]]:
         try:
             does_exist = await self.conn.fetch('SELECT id FROM accounts WHERE username=$1', json['username'])
             does_exist = does_exist[0]['id']
