@@ -176,6 +176,7 @@ class PyMessageServer(web.Application):
 
         app.sockets.pop(ws['user'])
 
+
     @routes.get('/get_user')
     async def rest_get_user(request):
         user = await app.get_user(int(request.rel_url.query['id']))
